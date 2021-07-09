@@ -1,8 +1,7 @@
 import React, { useState } from "react"
 import { useDebounce } from "./useDebounce"
-import { mount } from "enzyme"
-import { act } from "react-dom/test-utils"
 import { createTimeout } from "@corets/promise-helpers"
+import { act, render, screen } from "@testing-library/react"
 
 describe("useDebounce", () => {
   it("debounces value", async () => {
@@ -20,36 +19,37 @@ describe("useDebounce", () => {
       const debouncedCount = useDebounce(count, 30)
 
       return (
-        <div>
+        <h1>
           {renders},{count},{debouncedCount}
-        </div>
+        </h1>
       )
     }
 
-    const wrapper = mount(<Test />)
-    const targetText = () => wrapper.find("div").text()
+    render(<Test/>)
 
-    expect(targetText()).toBe("1,0,0")
+    const target = screen.getByRole("heading")
+
+    expect(target).toHaveTextContent("1,0,0")
 
     act(() => _setCount(1))
 
-    expect(targetText()).toBe("2,1,0")
+    expect(target).toHaveTextContent("2,1,0")
 
     await act(() => createTimeout(10))
 
-    expect(targetText()).toBe("2,1,0")
+    expect(target).toHaveTextContent("2,1,0")
 
     act(() => _setCount(2))
 
-    expect(targetText()).toBe("3,2,0")
+    expect(target).toHaveTextContent("3,2,0")
 
     await act(() => createTimeout(10))
 
-    expect(targetText()).toBe("3,2,0")
+    expect(target).toHaveTextContent("3,2,0")
 
     await act(() => createTimeout(30))
 
-    expect(targetText()).toBe("4,2,2")
+    expect(target).toHaveTextContent("4,2,2")
   })
 
   it("debounces function", async () => {
@@ -63,47 +63,48 @@ describe("useDebounce", () => {
       _increment = useDebounce((x) => setCount(count + x), 30)
 
       return (
-        <div>
+        <h1>
           {renders},{count}
-        </div>
+        </h1>
       )
     }
 
-    const wrapper = mount(<Test />)
-    const targetText = () => wrapper.find("div").text()
+    render(<Test/>)
 
-    expect(targetText()).toBe("1,0")
+    const target = screen.getByRole("heading")
+
+    expect(target).toHaveTextContent("1,0")
 
     act(() => _increment(1))
 
-    expect(targetText()).toBe("1,0")
+    expect(target).toHaveTextContent("1,0")
 
     await act(() => createTimeout(20))
 
-    expect(targetText()).toBe("1,0")
+    expect(target).toHaveTextContent("1,0")
 
     act(() => _increment(3))
 
-    expect(targetText()).toBe("1,0")
+    expect(target).toHaveTextContent("1,0")
 
     await act(() => createTimeout(20))
 
-    expect(targetText()).toBe("1,0")
+    expect(target).toHaveTextContent("1,0")
 
     await act(() => createTimeout(30))
 
-    expect(targetText()).toBe("2,3")
+    expect(target).toHaveTextContent("2,3")
 
     act(() => _increment(2))
 
-    expect(targetText()).toBe("2,3")
+    expect(target).toHaveTextContent("2,3")
 
     await act(() => createTimeout(20))
 
-    expect(targetText()).toBe("2,3")
+    expect(target).toHaveTextContent("2,3")
 
     await act(() => createTimeout(30))
 
-    expect(targetText()).toBe("3,5")
+    expect(target).toHaveTextContent("3,5")
   })
 })
