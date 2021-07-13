@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react"
-import { debounce } from "lodash"
+import debounce from "lodash/debounce"
 import { UseDebounce } from "./types"
 
 export const useDebounce: UseDebounce = <TValue>(
