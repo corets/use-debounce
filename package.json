@@ -21,7 +21,7 @@
     "/dist"
   ],
   "repository": "github:corets/use-debounce",
-  "homepage": "https://corets.github.io/use-debounce",
+  "homepage": "https://docs.corets.io/hooks/use-debounce",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
